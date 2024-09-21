@@ -1,14 +1,16 @@
 package com.bayutb.chat.data
 
+import android.util.Log
 import com.bayutb.chat.domain.model.Chat
 import com.bayutb.chat.domain.repository.ChatRepository
 import kotlinx.coroutines.delay
 import retrofit2.Retrofit
 
 class ChatDataSource(
-    retrofit: Retrofit
+    private val retrofit: Retrofit
 ): ChatRepository {
     override suspend fun getChatList(): List<Chat> {
+        Log.d("Dagger", "retrofit : $retrofit")
         delay(1000)
         val dummyChats = mutableListOf<Chat>()
         for (i in 1..10) {
