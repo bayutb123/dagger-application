@@ -1,36 +1,39 @@
 package com.bayutb.chat.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.bayutb.chat.R
+import com.bayutb.chat.databinding.ActivityChatListBinding
+import com.bayutb.chat.di.ChatComponent
 import com.bayutb.chat.di.DaggerChatComponent
+import com.bayutb.chat.presentation.fragment.ChatListFragment
+import com.bayutb.chat.presentation.fragment.ChatRoomFragment
 import com.bayutb.mydaggerapplication.getComponent
-import retrofit2.Retrofit
-import javax.inject.Inject
 
 class ChatListActivity : AppCompatActivity() {
-    @Inject
-    lateinit var retrofit: Retrofit
-    @Inject
-    lateinit var viewModel: ChatListViewModel
+    private lateinit var binding: ActivityChatListBinding
+    lateinit var chatComponent: ChatComponent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_chat_list)
+        binding = ActivityChatListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        DaggerChatComponent.builder()
+        chatComponent = DaggerChatComponent.builder()
             .appComponent(application.getComponent())
-            .build().inject(this)
+            .build()
 
-        observe()
-        Log.d("Dagger", retrofit.toString())
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragmentContainer, ChatListFragment())
+                .commit()
+        }
     }
 
-    private fun observe() {
-        viewModel.chats.observe(this) { chatList ->
-            chatList.forEach { chat ->
-                Log.d("Dagger", "sender: ${chat.sender} - ${chat.msg}")
-            }
-        }
+    fun goToDetailFragment(chatId: Int) {
+        val fragment = ChatRoomFragment.newInstance(chatId)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }
