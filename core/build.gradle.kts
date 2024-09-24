@@ -52,5 +52,6 @@ dependencies {
     api(libs.retrofit)
     api(libs.retrofit.converter.gson)
 
-
+    // datastore
+    api(libs.datastore)
 }
