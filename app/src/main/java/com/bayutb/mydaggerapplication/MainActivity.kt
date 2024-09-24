@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bayutb.core.app.Feature
 import com.bayutb.core.app.AppRouter
+import com.bayutb.core.di.getComponent
 import com.bayutb.mydaggerapplication.databinding.ActivityMainBinding
 import com.bayutb.mydaggerapplication.di.DaggerMainComponent
 import retrofit2.Retrofit

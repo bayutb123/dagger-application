@@ -1,16 +1,13 @@
 package com.bayutb.mydaggerapplication
 
-import android.app.Activity
 import android.app.Application
-import android.util.Log
 import com.bayutb.core.di.AppComponent
 import com.bayutb.core.di.DaggerAppComponent
 import com.bayutb.core.modules.LocalStorageModule
-import com.bayutb.mydaggerapplication.di.DaggerMainComponent
 import retrofit2.Retrofit
 import javax.inject.Inject
 
-class MyApplication : Application() {
+class MyApplication : Application(), AppComponent.AppComponentProvider {
     lateinit var appComponent: AppComponent
     @Inject
     lateinit var retrofit: Retrofit
@@ -19,8 +16,8 @@ class MyApplication : Application() {
         appComponent = DaggerAppComponent.builder().localStorageModule(LocalStorageModule(this)).build()
 
     }
-}
 
-fun Application.getComponent() : AppComponent {
-    return (this as MyApplication).appComponent
+    override fun getComponent(): AppComponent {
+        return appComponent
+    }
 }

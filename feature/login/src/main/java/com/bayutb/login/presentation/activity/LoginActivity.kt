@@ -5,12 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bayutb.core.app.AppRouter
 import com.bayutb.core.app.Feature
+import com.bayutb.core.di.getComponent
 import com.bayutb.login.databinding.ActivityLoginBinding
 import com.bayutb.login.di.DaggerLoginComponent
 import com.bayutb.login.presentation.viewmodel.LoginUiState
 import com.bayutb.login.presentation.viewmodel.LoginViewModel
 import com.bayutb.login.presentation.viewmodel.LoginViewModelFactory
-import com.bayutb.mydaggerapplication.getComponent
 import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity() {
@@ -22,7 +22,10 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
-        DaggerLoginComponent.builder().appComponent(application.getComponent()).build().inject(this)
+        DaggerLoginComponent.builder()
+            .appComponent(application.getComponent())
+            .build()
+            .inject(this)
         viewModel = ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
         setContentView(binding.root)
 

@@ -8,7 +8,7 @@ import com.bayutb.chat.di.ChatComponent
 import com.bayutb.chat.di.DaggerChatComponent
 import com.bayutb.chat.presentation.fragment.ChatListFragment
 import com.bayutb.chat.presentation.fragment.ChatRoomFragment
-import com.bayutb.mydaggerapplication.getComponent
+import com.bayutb.core.di.getComponent
 
 class ChatListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChatListBinding
