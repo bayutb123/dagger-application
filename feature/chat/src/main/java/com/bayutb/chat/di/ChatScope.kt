@@ -1,4 +1,4 @@
-package com.bayutb.login.di
+package com.bayutb.chat.di
 
 import javax.inject.Scope
 
