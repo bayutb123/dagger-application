@@ -1,7 +1,6 @@
 package com.bayutb.mydaggerapplication
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.bayutb.core.app.Feature
 import com.bayutb.core.app.AppRouter
@@ -24,10 +23,11 @@ class MainActivity : AppCompatActivity() {
             .build()
             .inject(this)
 
-        Log.d("Dagger", retrofit.toString())
-
         binding.btnChat.setOnClickListener {
             AppRouter.go(this, Feature.CHAT)
+        }
+        binding.btnLogin.setOnClickListener {
+            AppRouter.go(this, Feature.LOGIN)
         }
     }
 }
