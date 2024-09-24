@@ -2,7 +2,7 @@ package com.bayutb.login.data.service
 
 import com.bayutb.login.domain.model.LoginResult
 import com.bayutb.login.domain.model.ResultCode
-import com.bayutb.login.domain.model.User
+import com.bayutb.core.domain.model.User
 import com.bayutb.login.domain.payload.LoginPayload
 
 class DummyAuth {

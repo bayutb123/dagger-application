@@ -52,7 +52,8 @@ class LoginActivity : AppCompatActivity() {
         }
         viewModel.navigateToHome.observe(this) { authorized ->
             if (authorized) {
-                AppRouter.go(this, Feature.LOGIN)
+                AppRouter.go(this, Feature.HOME)
+                finish()
             }
         }
     }

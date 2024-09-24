@@ -10,6 +10,7 @@ import javax.inject.Singleton
 object NetworkModule {
 
     @Provides
+    @Singleton
     fun provideRetrofitClient() : Retrofit {
         val gson = GsonConverterFactory.create()
         return Retrofit.Builder()

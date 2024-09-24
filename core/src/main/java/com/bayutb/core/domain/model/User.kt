@@ -1,4 +1,4 @@
-package com.bayutb.login.domain.model
+package com.bayutb.core.domain.model
 
 data class User(
     val userName: String,

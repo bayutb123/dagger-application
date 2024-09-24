@@ -1,5 +1,6 @@
 package com.bayutb.login.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.bayutb.login.domain.model.ResultCode
-import com.bayutb.login.domain.model.User
+import com.bayutb.core.domain.model.User
 import com.bayutb.login.domain.payload.LoginPayload
 import com.bayutb.login.domain.repository.LoginRepository
 import kotlinx.coroutines.channels.Channel
@@ -24,6 +25,7 @@ class LoginViewModel(
     val navigateToHome = _navigateToHome.receiveAsFlow().asLiveData()
 
     fun login(userName: String, password: String) {
+        Log.d("Dagger", userName  + password)
         _uiState.value = LoginUiState.Loading
         val payload = LoginPayload(userName, password)
         viewModelScope.launch {

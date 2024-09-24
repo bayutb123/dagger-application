@@ -13,6 +13,9 @@ object AppRouter {
             Feature.CHAT -> {
                 intent.setClassName(context, "com.bayutb.chat.presentation.ChatListActivity")
             }
+            Feature.HOME -> {
+                intent.setClassName(context, "com.bayutb.mydaggerapplication.MainActivity")
+            }
         }
         context.startActivity(intent)
     }
@@ -20,5 +23,6 @@ object AppRouter {
 
 enum class Feature {
     LOGIN,
-    CHAT
+    CHAT,
+    HOME
 }

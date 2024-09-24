@@ -1,4 +1,4 @@
-package com.bayutb.login.di
+package com.bayutb.mydaggerapplication.di
 
 import javax.inject.Scope
 

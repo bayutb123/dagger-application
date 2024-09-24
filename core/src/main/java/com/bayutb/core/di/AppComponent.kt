@@ -1,10 +1,9 @@
 package com.bayutb.core.di
 
 import android.app.Application
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import com.bayutb.core.modules.LocalStorageModule
 import com.bayutb.core.modules.NetworkModule
+import com.bayutb.core.repository.DataStoreRepository
 import dagger.Component
 import retrofit2.Retrofit
 import javax.inject.Singleton
@@ -13,7 +12,7 @@ import javax.inject.Singleton
 @Component(modules = [NetworkModule::class, LocalStorageModule::class])
 interface AppComponent {
     fun retrofit(): Retrofit
-    fun preferenceDataStore(): DataStore<Preferences>
+    fun dataStoreRepository(): DataStoreRepository
 
     interface AppComponentProvider {
         fun getComponent(): AppComponent

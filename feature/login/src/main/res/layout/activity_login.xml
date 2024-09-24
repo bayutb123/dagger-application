@@ -32,6 +32,7 @@
         android:id="@+id/errorMsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:text="Failed to login"
         android:textColor="@color/design_default_color_error"
         app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword"
