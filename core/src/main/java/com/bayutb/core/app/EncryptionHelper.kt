@@ -1,31 +1,34 @@
 package com.bayutb.core.app
 
 object EncryptionHelper {
-    private const val SHIFT = 5 // ALPHABETICAL SHIFT
-    fun encrypt(text: String, shift: Int = SHIFT): String {
+    private const val KEY = "DGKEEPENCRYPTED"
+    fun encrypt(text: String): String {
         val encryptedText = StringBuilder()
 
-        for (char in text) {
-            // Check if it's an uppercase letter
-            if (char in 'A'..'Z') {
-                // Perform the shift and wrap around within the alphabet
-                val shiftedChar = ((char - 'A' + shift) % 26 + 'A'.toInt()).toChar()
-                encryptedText.append(shiftedChar)
-            } else if (char in 'a'..'z') {
-                // For lowercase letters, do the same
-                val shiftedChar = ((char - 'a' + shift) % 26 + 'a'.toInt()).toChar()
-                encryptedText.append(shiftedChar)
-            } else {
-                // Non-alphabet characters remain unchanged
-                encryptedText.append(char)
-            }
+        for (i in text.indices) {
+            val char = text[i]
+            val shift = KEY[i % KEY.length].code // Variable shift based on the key
+
+            // Shift the character within the range of printable ASCII characters (32-126)
+            val shiftedChar = ((char.code - 32 + shift) % 95 + 32).toChar()
+            encryptedText.append(shiftedChar)
         }
 
         return encryptedText.toString()
     }
 
     fun decrypt(text: String): String {
-        // Decrypt by shifting in the opposite direction
-        return encrypt(text, 26 - SHIFT)
+        val decryptedText = StringBuilder()
+
+        for (i in text.indices) {
+            val char = text[i]
+            val shift = KEY[i % KEY.length].code // Use the key to reverse the shift
+
+            // Reverse the shift within the range of printable ASCII characters (32-126)
+            val shiftedChar = ((char.code - 32 - shift + 95) % 95 + 32).toChar()
+            decryptedText.append(shiftedChar)
+        }
+
+        return decryptedText.toString()
     }
 }

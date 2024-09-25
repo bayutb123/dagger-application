@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface RoomRepository {
     suspend fun register(user: User): ResultCode
-    fun validateUser(user: User): Flow<User?>
+    fun validateUser(user: User): User?
 }

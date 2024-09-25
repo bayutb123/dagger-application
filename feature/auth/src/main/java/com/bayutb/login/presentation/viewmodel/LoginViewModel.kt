@@ -11,7 +11,9 @@ import com.bayutb.login.domain.model.LoginResultCode
 import com.bayutb.core.domain.model.User
 import com.bayutb.login.domain.payload.LoginPayload
 import com.bayutb.login.domain.repository.LoginRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,16 +30,18 @@ class LoginViewModel(
         Log.d("Dagger", userName  + password)
         _uiState.value = LoginUiState.Loading
         val payload = LoginPayload(userName, password)
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val result = repository.login(payload)
-            when (result.loginResultCode) {
-                LoginResultCode.SUCCESS -> {
-                    _uiState.value = LoginUiState.Success(result.user)
-                    _navigateToHome.send(true)
-                }
-                LoginResultCode.FAILED -> {
-                    _uiState.value = LoginUiState.Failed("Failed to login wkwk")
-                    _navigateToHome.send(false)
+            result.map { login ->
+                when (login.loginResultCode) {
+                    LoginResultCode.SUCCESS -> {
+                        _uiState.value = LoginUiState.Success(login.user)
+                        _navigateToHome.send(true)
+                    }
+                    LoginResultCode.FAILED -> {
+                        _uiState.value = LoginUiState.Failed("Failed to login wkwk")
+                        _navigateToHome.send(false)
+                    }
                 }
             }
         }

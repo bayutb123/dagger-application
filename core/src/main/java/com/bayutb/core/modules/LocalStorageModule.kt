@@ -46,12 +46,18 @@ class LocalStorageModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideDaggerDatabase(context: Context) : DaggerDatabase {
+    fun provideDaggerDatabase() : DaggerDatabase {
         return Room.databaseBuilder(
             context,
             DaggerDatabase::class.java,
             "dagger-db"
         ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideDaggerDao(database: DaggerDatabase) : DaggerDao {
+        return database.dao()
     }
 
     @Provides

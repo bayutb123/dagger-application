@@ -15,6 +15,6 @@ interface DaggerDao {
     @Query("SELECT * FROM user WHERE userName=:userName")
     fun checkUsernameAvailability(userName: String): User?
 
-    @Query("SELECT * FROM user WHERE userName=:userName AND password=:password")
-    fun getUser(userName: String, password: String): Flow<User?>
+    @Query("SELECT * FROM user WHERE userName=:userName")
+    fun getUser(userName: String): Flow<User?>
 }
