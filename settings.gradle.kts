@@ -21,6 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "My Dagger Application"
 include(":app")
-include(":feature:login")
+include(":feature:auth")
 include(":core")
 include(":feature:chat")

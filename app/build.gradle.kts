@@ -43,7 +43,7 @@ android {
 
 dependencies {
     api(project(":core"))
-    api(project(":feature:login"))
+    api(project(":feature:auth"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
