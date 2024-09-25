@@ -5,5 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface DataStoreRepository {
     suspend fun setUser(user: User)
-    fun getUser(): Flow<User?>
+    fun getLoggedInUser(): Flow<User?>
+    suspend fun deleteSession()
 }

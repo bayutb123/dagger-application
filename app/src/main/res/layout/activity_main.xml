@@ -26,4 +26,16 @@
         app:layout_constraintStart_toStartOf="@id/btnChat"
         app:layout_constraintEnd_toEndOf="@id/btnChat"/>
 
+    <Button
+        android:id="@+id/btnLogout"
+        android:backgroundTint="@color/design_default_color_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/tvUserInfo"
+        app:layout_constraintStart_toStartOf="@id/tvUserInfo"
+        app:layout_constraintTop_toTopOf="@id/tvUserInfo" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

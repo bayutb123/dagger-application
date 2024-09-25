@@ -14,21 +14,29 @@ class DataStoreRepositoryImpl(
 ) : DataStoreRepository {
     override suspend fun setUser(user: User) {
         dataStore.edit { pref->
+            pref[PreferenceKeys.PREF_ID] = user.id
             pref[PreferenceKeys.PREF_USERNAME] = user.userName
             pref[PreferenceKeys.PREF_PASSWORD] = user.password
         }
     }
 
-    override fun getUser(): Flow<User?> {
+    override fun getLoggedInUser(): Flow<User?> {
         return dataStore.data.map { pref ->
+            val id = pref[PreferenceKeys.PREF_ID]
             val userName = pref[PreferenceKeys.PREF_USERNAME]
             val password = pref[PreferenceKeys.PREF_PASSWORD]
 
-            if (userName != null && password != null) {
-                User(0, userName, password)
+            if (id != null && userName != null && password != null) {
+                User(id, userName, password)
             } else {
                 null
             }
+        }
+    }
+
+    override suspend fun deleteSession() {
+        dataStore.edit { pref ->
+            pref.clear()
         }
     }
 }

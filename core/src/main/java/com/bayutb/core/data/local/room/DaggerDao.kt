@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.bayutb.core.domain.model.User
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DaggerDao {
@@ -16,5 +15,5 @@ interface DaggerDao {
     fun checkUsernameAvailability(userName: String): User?
 
     @Query("SELECT * FROM user WHERE userName=:userName")
-    fun getUser(userName: String): Flow<User?>
+    fun validateUser(userName: String): User?
 }

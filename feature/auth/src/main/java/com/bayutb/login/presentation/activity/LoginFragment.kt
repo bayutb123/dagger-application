@@ -6,12 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import com.bayutb.core.app.AppRouter
-import com.bayutb.core.app.Feature
-import com.bayutb.login.R
 import com.bayutb.login.databinding.FragmentLoginBinding
-import com.bayutb.login.databinding.FragmentRegisterBinding
-import com.bayutb.login.di.DaggerAuthComponent
 import com.bayutb.login.presentation.viewmodel.LoginUiState
 import com.bayutb.login.presentation.viewmodel.LoginViewModel
 import com.bayutb.login.presentation.viewmodel.LoginViewModelFactory
@@ -71,8 +66,8 @@ class LoginFragment : Fragment() {
                 }
             }
         }
-        viewModel.navigateToHome.observe(viewLifecycleOwner) { authorized ->
-            if (authorized) {
+        viewModel.loggedIn.observe(viewLifecycleOwner) { user ->
+            if (user != null) {
                 (activity as LoginActivity).authorized()
             }
         }

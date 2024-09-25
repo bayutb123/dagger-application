@@ -8,7 +8,6 @@ import com.bayutb.login.domain.repository.LoginRepository
 import com.bayutb.login.presentation.viewmodel.LoginViewModelFactory
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 
 @Module
 object LoginModule {
@@ -19,12 +18,12 @@ object LoginModule {
     }
 
     @Provides
-    fun provideLoginRepository(roomRepository: RoomRepository, dataStoreRepository: DataStoreRepository) : LoginRepository {
-        return LoginDataSource(roomRepository, dataStoreRepository)
+    fun provideLoginRepository(roomRepository: RoomRepository) : LoginRepository {
+        return LoginDataSource(roomRepository)
     }
 
     @Provides
-    fun provideLoginViewModelFactory(repository: LoginRepository) : LoginViewModelFactory {
-        return LoginViewModelFactory(repository)
+    fun provideLoginViewModelFactory(repository: LoginRepository, dataStoreRepository: DataStoreRepository) : LoginViewModelFactory {
+        return LoginViewModelFactory(repository, dataStoreRepository)
     }
 }

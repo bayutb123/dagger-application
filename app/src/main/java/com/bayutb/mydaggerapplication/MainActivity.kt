@@ -1,6 +1,7 @@
 package com.bayutb.mydaggerapplication
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bayutb.core.app.Feature
@@ -35,15 +36,19 @@ class MainActivity : AppCompatActivity() {
         binding.btnChat.setOnClickListener {
             AppRouter.go(this, Feature.CHAT)
         }
+        binding.btnLogout.setOnClickListener {
+            viewModel.logout()
+        }
     }
 
     private fun observe() {
         viewModel.user.observe(this) { user ->
-            if (user == null) {
+            if (user != null) {
+                binding.tvUserInfo.text = user.userName
+                binding.btnLogout.visibility = View.VISIBLE
+            } else {
                 AppRouter.go(this, Feature.LOGIN)
                 finish()
-            } else {
-                binding.tvUserInfo.text = getString(R.string.logged_in_as, user.userName)
             }
         }
     }

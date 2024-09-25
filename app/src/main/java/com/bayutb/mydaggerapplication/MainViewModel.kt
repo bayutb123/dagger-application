@@ -3,13 +3,20 @@ package com.bayutb.mydaggerapplication
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.bayutb.core.repository.DataStoreRepository
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val dataStoreRepository: DataStoreRepository
 ): ViewModel() {
-    val user = dataStoreRepository.getUser().distinctUntilChanged().asLiveData()
+    val user = dataStoreRepository.getLoggedInUser().asLiveData()
+
+    fun logout() {
+        viewModelScope.launch {
+            dataStoreRepository.deleteSession()
+        }
+    }
 }
 
 @Suppress("UNCHECKED_CAST")
