@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.bayutb.login.domain.model.ResultCode
+import com.bayutb.login.domain.model.LoginResultCode
 import com.bayutb.core.domain.model.User
 import com.bayutb.login.domain.payload.LoginPayload
 import com.bayutb.login.domain.repository.LoginRepository
@@ -30,12 +30,12 @@ class LoginViewModel(
         val payload = LoginPayload(userName, password)
         viewModelScope.launch {
             val result = repository.login(payload)
-            when (result.resultCode) {
-                ResultCode.SUCCESS -> {
+            when (result.loginResultCode) {
+                LoginResultCode.SUCCESS -> {
                     _uiState.value = LoginUiState.Success(result.user)
                     _navigateToHome.send(true)
                 }
-                ResultCode.FAILED -> {
+                LoginResultCode.FAILED -> {
                     _uiState.value = LoginUiState.Failed("Failed to login wkwk")
                     _navigateToHome.send(false)
                 }
