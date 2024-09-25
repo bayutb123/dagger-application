@@ -42,6 +42,8 @@ class MainActivity : AppCompatActivity() {
             if (user == null) {
                 AppRouter.go(this, Feature.LOGIN)
                 finish()
+            } else {
+                binding.tvUserInfo.text = getString(R.string.logged_in_as, user.userName)
             }
         }
     }

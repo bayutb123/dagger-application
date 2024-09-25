@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">My Dagger Application</string>
     <string name="title_chat">Chat Module</string>
+    <string name="logged_in_as">logged in as %1$s</string>
 </resources>
