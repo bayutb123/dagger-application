@@ -25,7 +25,7 @@ class DataStoreRepositoryImpl(
             val password = pref[PreferenceKeys.PREF_PASSWORD]
 
             if (userName != null && password != null) {
-                User(userName, password)
+                User(0, userName, password)
             } else {
                 null
             }

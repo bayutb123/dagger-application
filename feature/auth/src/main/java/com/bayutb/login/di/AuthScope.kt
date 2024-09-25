@@ -3,4 +3,4 @@ package com.bayutb.login.di
 import javax.inject.Scope
 
 @Scope
-annotation class LoginScope()
+annotation class AuthScope()

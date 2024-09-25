@@ -14,6 +14,7 @@ ksp = "2.0.10-1.0.24"
 retrofit = "2.9.0"
 lifecycle-viewmodel = "2.8.6"
 datastore = "1.1.1"
+room = "2.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -30,6 +31,9 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel"}
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore"}
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room"}
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room"}
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
