@@ -3,7 +3,7 @@ package com.bayutb.mydaggerapplication
 import android.app.Application
 import com.bayutb.core.di.AppComponent
 import com.bayutb.core.di.DaggerAppComponent
-import com.bayutb.core.modules.LocalStorageModule
+import com.bayutb.core.di.modules.LocalStorageModule
 import retrofit2.Retrofit
 import javax.inject.Inject
 

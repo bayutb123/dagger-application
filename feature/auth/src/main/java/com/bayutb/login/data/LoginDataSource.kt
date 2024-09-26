@@ -2,7 +2,7 @@ package com.bayutb.login.data
 
 import com.bayutb.core.app.EncryptionHelper
 import com.bayutb.core.domain.model.User
-import com.bayutb.core.repository.RoomRepository
+import com.bayutb.core.domain.repository.RoomRepository
 import com.bayutb.login.domain.model.LoginResult
 import com.bayutb.login.domain.model.LoginResultCode
 import com.bayutb.login.domain.payload.LoginPayload

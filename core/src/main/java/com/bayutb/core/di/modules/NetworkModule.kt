@@ -1,4 +1,4 @@
-package com.bayutb.core.modules
+package com.bayutb.core.di.modules
 
 import dagger.Module
 import dagger.Provides

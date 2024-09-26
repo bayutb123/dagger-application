@@ -2,7 +2,7 @@ package com.bayutb.login.data
 
 import com.bayutb.core.domain.model.ResultCode
 import com.bayutb.core.domain.model.User
-import com.bayutb.core.repository.RoomRepository
+import com.bayutb.core.domain.repository.RoomRepository
 import com.bayutb.login.domain.repository.RegisterRepository
 
 class RegisterDataSource(

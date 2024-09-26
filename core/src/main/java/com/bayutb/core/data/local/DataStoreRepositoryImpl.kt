@@ -5,7 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import com.bayutb.core.domain.model.PreferenceKeys
 import com.bayutb.core.domain.model.User
-import com.bayutb.core.repository.DataStoreRepository
+import com.bayutb.core.domain.repository.DataStoreRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

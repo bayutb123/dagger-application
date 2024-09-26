@@ -1,4 +1,4 @@
-package com.bayutb.core.modules
+package com.bayutb.core.di.modules
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -8,14 +8,13 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
-import androidx.room.Database
 import androidx.room.Room
 import com.bayutb.core.data.local.DataStoreRepositoryImpl
 import com.bayutb.core.data.local.room.DaggerDao
 import com.bayutb.core.data.local.room.DaggerDatabase
 import com.bayutb.core.data.local.room.RoomRepositoryImpl
-import com.bayutb.core.repository.DataStoreRepository
-import com.bayutb.core.repository.RoomRepository
+import com.bayutb.core.domain.repository.DataStoreRepository
+import com.bayutb.core.domain.repository.RoomRepository
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineScope

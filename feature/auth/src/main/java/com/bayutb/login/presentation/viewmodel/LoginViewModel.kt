@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.bayutb.core.domain.model.User
-import com.bayutb.core.repository.DataStoreRepository
+import com.bayutb.core.domain.repository.DataStoreRepository
 import com.bayutb.login.domain.model.LoginResultCode
 import com.bayutb.login.domain.payload.LoginPayload
 import com.bayutb.login.domain.repository.LoginRepository

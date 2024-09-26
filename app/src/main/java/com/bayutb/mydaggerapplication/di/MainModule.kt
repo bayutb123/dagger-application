@@ -1,6 +1,6 @@
 package com.bayutb.mydaggerapplication.di
 
-import com.bayutb.core.repository.DataStoreRepository
+import com.bayutb.core.domain.repository.DataStoreRepository
 import com.bayutb.mydaggerapplication.MainViewModelProvider
 import dagger.Module
 import dagger.Provides

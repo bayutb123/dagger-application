@@ -1,7 +1,7 @@
 package com.bayutb.login.di
 
-import com.bayutb.core.repository.DataStoreRepository
-import com.bayutb.core.repository.RoomRepository
+import com.bayutb.core.domain.repository.DataStoreRepository
+import com.bayutb.core.domain.repository.RoomRepository
 import com.bayutb.login.data.LoginDataSource
 import com.bayutb.login.data.service.DummyAuth
 import com.bayutb.login.domain.repository.LoginRepository

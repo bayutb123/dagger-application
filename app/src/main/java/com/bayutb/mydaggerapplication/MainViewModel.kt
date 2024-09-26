@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.bayutb.core.repository.DataStoreRepository
+import com.bayutb.core.domain.repository.DataStoreRepository
 import kotlinx.coroutines.launch
 
 class MainViewModel(

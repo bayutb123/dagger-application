@@ -51,11 +51,17 @@ class LoginFragment : Fragment() {
 
     private fun observe() {
         viewModel.uiState.observe(viewLifecycleOwner) { loginUiState ->
+            binding.errorMsg.visibility = if (loginUiState is LoginUiState.Failed) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
             when (loginUiState) {
                 is LoginUiState.Idle -> {
                     binding.btnLogin.isEnabled = true
                 }
                 is LoginUiState.Failed -> {
+                    binding.errorMsg.text = loginUiState.message
                     binding.btnLogin.isEnabled = true
                 }
                 is LoginUiState.Loading -> {

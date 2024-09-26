@@ -3,7 +3,7 @@ package com.bayutb.core.data.local.room
 import com.bayutb.core.domain.model.ResultCode
 import com.bayutb.core.domain.model.User
 import com.bayutb.core.domain.model.encryptPassword
-import com.bayutb.core.repository.RoomRepository
+import com.bayutb.core.domain.repository.RoomRepository
 
 class RoomRepositoryImpl(
     private val dao: DaggerDao

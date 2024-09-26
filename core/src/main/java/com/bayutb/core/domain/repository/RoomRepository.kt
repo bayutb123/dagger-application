@@ -1,4 +1,4 @@
-package com.bayutb.core.repository
+package com.bayutb.core.domain.repository
 
 import com.bayutb.core.domain.model.ResultCode
 import com.bayutb.core.domain.model.User
