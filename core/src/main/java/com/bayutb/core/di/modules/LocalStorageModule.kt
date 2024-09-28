@@ -13,6 +13,7 @@ import com.bayutb.core.data.local.DataStoreRepositoryImpl
 import com.bayutb.core.data.local.room.DaggerDao
 import com.bayutb.core.data.local.room.DaggerDatabase
 import com.bayutb.core.data.local.room.RoomRepositoryImpl
+import com.bayutb.core.di.annotations.ApplicationContext
 import com.bayutb.core.domain.repository.DataStoreRepository
 import com.bayutb.core.domain.repository.RoomRepository
 import dagger.Module
@@ -23,10 +24,10 @@ import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
 @Module
-class LocalStorageModule(private val context: Context) {
+object LocalStorageModule {
     @Provides
     @Singleton
-    fun provideDataStorePref(): DataStore<Preferences> {
+    fun provideDataStorePref(@ApplicationContext context: Context): DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(
             corruptionHandler = ReplaceFileCorruptionHandler {
                 emptyPreferences()
@@ -45,7 +46,7 @@ class LocalStorageModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideDaggerDatabase() : DaggerDatabase {
+    fun provideDaggerDatabase(@ApplicationContext context: Context) : DaggerDatabase {
         return Room.databaseBuilder(
             context,
             DaggerDatabase::class.java,
