@@ -1,40 +1,39 @@
-package com.bayutb.login.presentation.activity
+package com.bayutb.login.presentation.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import com.bayutb.core.app.navController
+import com.bayutb.core.di.getComponent
 import com.bayutb.login.databinding.FragmentRegisterBinding
+import com.bayutb.login.di.DaggerAuthComponent
 import com.bayutb.login.presentation.viewmodel.RegisterViewModel
 import com.bayutb.login.presentation.viewmodel.RegisterViewModelFactory
 import javax.inject.Inject
 
-/**
- * A simple [Fragment] subclass.
- * Use the [RegisterFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class RegisterFragment : Fragment() {
 
     @Inject lateinit var viewModelFactory: RegisterViewModelFactory
-    private lateinit var viewModel: RegisterViewModel
+    private val viewModel: RegisterViewModel by viewModels { viewModelFactory }
 
     private lateinit var binding: FragmentRegisterBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as LoginActivity).authComponent.inject(this)
+        DaggerAuthComponent.builder()
+            .appComponent(requireActivity().application.getComponent())
+            .build().inject(this)
         binding = FragmentRegisterBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(this, viewModelFactory)[RegisterViewModel::class]
         setupView()
     }
 
     private fun observe() {
         viewModel.navigateToLogin.observe(viewLifecycleOwner) { shouldNavigate ->
             if (shouldNavigate) {
-                (activity as LoginActivity).backToLogin()
+                requireActivity().navController().popBackStack()
             }
         }
     }
@@ -59,11 +58,5 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observe()
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            RegisterFragment()
     }
 }

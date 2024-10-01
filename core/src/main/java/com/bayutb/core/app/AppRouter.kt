@@ -1,28 +1,39 @@
 package com.bayutb.core.app
 
-import android.content.Context
-import android.content.Intent
+import android.os.Bundle
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
+import com.bayutb.core.R
 
 object AppRouter {
-    fun go(context: Context, feature: Feature) {
-        val intent = Intent()
-        when (feature) {
-            Feature.LOGIN -> {
-                intent.setClassName(context, "com.bayutb.login.presentation.activity.LoginActivity")
-            }
-            Feature.CHAT -> {
-                intent.setClassName(context, "com.bayutb.chat.presentation.ChatListActivity")
-            }
-            Feature.HOME -> {
-                intent.setClassName(context, "com.bayutb.mydaggerapplication.MainActivity")
-            }
+    fun go(
+        navController: NavController,
+        feature: Feature,
+        bundle: Bundle = Bundle(),
+        popBackStack: Boolean = false,
+    ) {
+        val id = when (feature) {
+            Feature.LOGIN -> R.id.loginFragment
+            Feature.CHAT -> R.id.chatListFragment
+            Feature.HOME -> R.id.homeFragment
+            Feature.REGISTER -> R.id.registerFragment
+            Feature.CHATROOM -> R.id.chatRoomFragment
         }
-        context.startActivity(intent)
+
+        val navOptions = NavOptions.Builder().apply {
+            if (popBackStack) {
+                setPopUpTo(id, inclusive = true)
+            }
+        }.build()
+
+        navController.navigate(id, bundle, navOptions)
     }
 }
 
 enum class Feature {
     LOGIN,
     CHAT,
-    HOME
+    HOME,
+    REGISTER,
+    CHATROOM
 }

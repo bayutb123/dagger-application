@@ -11,6 +11,8 @@ import com.bayutb.core.domain.repository.DataStoreRepository
 import com.bayutb.login.domain.model.LoginResultCode
 import com.bayutb.login.domain.payload.LoginPayload
 import com.bayutb.login.domain.repository.LoginRepository
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,7 +22,11 @@ class LoginViewModel(
 ) : ViewModel() {
     private var _uiState = MutableLiveData<LoginUiState>()
     var uiState: LiveData<LoginUiState> = _uiState
-    val loggedIn = dataStoreRepository.getLoggedInUser().asLiveData()
+    val loggedIn = dataStoreRepository.getLoggedInUser().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = null
+    )
 
     fun login(userName: String, password: String) {
         _uiState.value = LoginUiState.Loading

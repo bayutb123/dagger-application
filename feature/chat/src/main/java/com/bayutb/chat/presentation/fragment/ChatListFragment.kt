@@ -8,11 +8,18 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bayutb.chat.databinding.FragmentChatListBinding
+import com.bayutb.chat.di.ChatComponent
+import com.bayutb.chat.di.DaggerChatComponent
 import com.bayutb.chat.domain.model.Chat
-import com.bayutb.chat.presentation.ChatListActivity
 import com.bayutb.chat.presentation.adapter.ChatListAdapter
 import com.bayutb.chat.presentation.viewmodel.ChatListViewModel
 import com.bayutb.chat.presentation.viewmodel.ChatListViewModelFactory
+import com.bayutb.core.app.AppRouter
+import com.bayutb.core.app.Feature
+import com.bayutb.core.app.NavControllerProvider
+import com.bayutb.core.app.navController
+import com.bayutb.core.di.getComponent
+import com.bayutb.mydaggerapplication.MainActivity
 import javax.inject.Inject
 
 class ChatListFragment : Fragment(), ChatListAdapter.OnClickListener {
@@ -25,7 +32,9 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (activity as ChatListActivity).chatComponent.inject(this)
+        DaggerChatComponent.builder()
+            .appComponent(requireActivity().application.getComponent())
+            .build().inject(this)
     }
 
     override fun onCreateView(
@@ -52,6 +61,9 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnClickListener {
     }
 
     override fun onClick(chat: Chat) {
-        (activity as ChatListActivity).goToDetailFragment(chat.id)
+        val bundle = Bundle().also {
+            it.putInt("chatId", chat.id)
+        }
+        AppRouter.go(requireActivity().navController(), Feature.CHATROOM, bundle)
     }
 }

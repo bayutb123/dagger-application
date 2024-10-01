@@ -7,31 +7,30 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bayutb.chat.databinding.FragmentChatRoomBinding
-import com.bayutb.chat.presentation.ChatListActivity
+import com.bayutb.chat.di.DaggerChatComponent
 import com.bayutb.chat.presentation.viewmodel.ChatListViewModel
 import com.bayutb.chat.presentation.viewmodel.ChatListViewModelFactory
+import com.bayutb.core.di.getComponent
 import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
- * Use the [ChatRoomFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-private const val CHAT_ID = "param1"
 
 class ChatRoomFragment : Fragment() {
-    private lateinit var binding: FragmentChatRoomBinding
     private var chatId: Int? = null
+    private lateinit var binding: FragmentChatRoomBinding
 
     @Inject
     lateinit var viewModelFactory: ChatListViewModelFactory
     private lateinit var viewModel: ChatListViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as ChatListActivity).chatComponent.inject(this)
-        arguments?.let {
-            chatId = it.getInt(CHAT_ID)
-        }
+        DaggerChatComponent.builder()
+            .appComponent(requireActivity().application.getComponent())
+            .build().inject(this)
+        chatId = arguments?.getInt("chatId")
         viewModel = ViewModelProvider(this, viewModelFactory)[ChatListViewModel::class.java]
     }
 
@@ -54,15 +53,5 @@ class ChatRoomFragment : Fragment() {
             binding.sender.text = chat.sender
             binding.msg.text = chat.msg
         }
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(chatId: Int) =
-            ChatRoomFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(CHAT_ID, chatId)
-                }
-            }
     }
 }

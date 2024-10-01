@@ -1,15 +1,23 @@
-package com.bayutb.login.presentation.activity
+package com.bayutb.login.presentation.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.bayutb.core.app.AppRouter
+import com.bayutb.core.app.Feature
+import com.bayutb.core.app.navController
+import com.bayutb.core.di.getComponent
 import com.bayutb.login.databinding.FragmentLoginBinding
+import com.bayutb.login.di.DaggerAuthComponent
 import com.bayutb.login.presentation.viewmodel.LoginUiState
 import com.bayutb.login.presentation.viewmodel.LoginViewModel
 import com.bayutb.login.presentation.viewmodel.LoginViewModelFactory
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LoginFragment : Fragment() {
@@ -17,13 +25,15 @@ class LoginFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: LoginViewModelFactory
-    private lateinit var viewModel: LoginViewModel
+    private val viewModel: LoginViewModel by viewModels { viewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = FragmentLoginBinding.inflate(layoutInflater)
-        (activity as LoginActivity).authComponent.inject(this)
-        viewModel = ViewModelProvider(this, viewModelFactory)[LoginViewModel::class]
+        DaggerAuthComponent.builder()
+            .appComponent(requireActivity().application.getComponent())
+            .build().inject(this)
+
         setupView()
     }
 
@@ -42,10 +52,12 @@ class LoginFragment : Fragment() {
             val userName = binding.editTextTextEmailAddress.text
             val password = binding.editTextTextPassword.text
 
-            viewModel.login(userName.toString(), password.toString())
+            if (userName.isNotBlank() && password.isNotBlank()) {
+                viewModel.login(userName.toString(), password.toString())
+            }
         }
         binding.btnRegisterNow.setOnClickListener{
-            (activity as LoginActivity).setUpRegisterFragment()
+            AppRouter.go(requireActivity().navController(), Feature.REGISTER)
         }
     }
 
@@ -56,25 +68,12 @@ class LoginFragment : Fragment() {
             } else {
                 View.GONE
             }
-            when (loginUiState) {
-                is LoginUiState.Idle -> {
-                    binding.btnLogin.isEnabled = true
-                }
-                is LoginUiState.Failed -> {
-                    binding.errorMsg.text = loginUiState.message
-                    binding.btnLogin.isEnabled = true
-                }
-                is LoginUiState.Loading -> {
-                    binding.btnLogin.isEnabled = false
-                }
-                is LoginUiState.Success -> {
-                    binding.btnLogin.isEnabled = true
-                }
-            }
         }
-        viewModel.loggedIn.observe(viewLifecycleOwner) { user ->
-            if (user != null) {
-                (activity as LoginActivity).authorized()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.loggedIn.collectLatest { user->
+                if (user != null) {
+                    AppRouter.go(requireActivity().navController(), Feature.HOME, popBackStack = true)
+                }
             }
         }
     }

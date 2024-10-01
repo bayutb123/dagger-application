@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.ksp)
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -59,4 +60,9 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
+
+    // navigation
+    api(libs.navigation.ui)
+    api(libs.navigation.fragment)
+    api(libs.navigation.dynamic.features)
 }
