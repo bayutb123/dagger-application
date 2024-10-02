@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import com.bayutb.chat.databinding.FragmentChatRoomBinding
 import com.bayutb.chat.di.getChatComponent
@@ -17,6 +18,7 @@ import com.bayutb.chat.presentation.viewmodel.ChatListViewModel
  */
 
 class ChatRoomFragment : Fragment() {
+    private val viewModelStoreOwner: ViewModelStoreOwner = this
     private var chatId: Int? = null
     private lateinit var binding: FragmentChatRoomBinding
 
@@ -25,7 +27,7 @@ class ChatRoomFragment : Fragment() {
         super.onCreate(savedInstanceState)
         val chatComponent = requireActivity().application.getChatComponent()
         viewModel = ViewModelProvider.create(
-            owner = this,
+            owner = viewModelStoreOwner,
             factory = ChatListViewModel.Factory,
             extras = MutableCreationExtras().apply {
                 set(

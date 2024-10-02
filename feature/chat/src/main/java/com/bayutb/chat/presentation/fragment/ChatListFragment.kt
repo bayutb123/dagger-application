@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bayutb.chat.databinding.FragmentChatListBinding
@@ -18,6 +19,7 @@ import com.bayutb.core.app.Feature
 import com.bayutb.core.app.navController
 
 class ChatListFragment : Fragment(), ChatListAdapter.OnClickListener {
+    private val viewModelStoreOwner: ViewModelStoreOwner = this
     private lateinit var chatListAdapter: ChatListAdapter
 
     private lateinit var viewModel: ChatListViewModel
@@ -29,7 +31,7 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnClickListener {
         val chatComponent = requireActivity().application.getChatComponent()
 
         viewModel = ViewModelProvider.create(
-            owner = this,
+            owner = viewModelStoreOwner,
             factory = ChatListViewModel.Factory,
             extras = MutableCreationExtras().apply {
                 set(
