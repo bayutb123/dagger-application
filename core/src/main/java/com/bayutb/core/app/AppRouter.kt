@@ -12,6 +12,7 @@ object AppRouter {
         bundle: Bundle = Bundle(),
         popBackStack: Boolean = false,
     ) {
+        val currentRoute = navController.currentDestination?.id
         val id = when (feature) {
             Feature.LOGIN -> R.id.loginFragment
             Feature.CHAT -> R.id.chatListFragment
@@ -22,7 +23,9 @@ object AppRouter {
 
         val navOptions = NavOptions.Builder().apply {
             if (popBackStack) {
-                setPopUpTo(id, inclusive = true)
+                currentRoute?.let { route ->
+                    setPopUpTo(route, inclusive = true)
+                }
             }
         }.build()
 
