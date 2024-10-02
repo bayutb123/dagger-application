@@ -35,7 +35,7 @@ class HomeFragment : Fragment() {
                     mainComponent.provideDataStoreRepository()
                 )
             }
-        )[MainViewModel::class.java]
+        )[MainViewModel::class]
     }
 
     override fun onCreateView(

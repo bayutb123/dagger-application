@@ -6,12 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.MutableCreationExtras
 import com.bayutb.chat.databinding.FragmentChatRoomBinding
-import com.bayutb.chat.di.DaggerChatComponent
+import com.bayutb.chat.di.getChatComponent
 import com.bayutb.chat.presentation.viewmodel.ChatListViewModel
-import com.bayutb.chat.presentation.viewmodel.ChatListViewModelFactory
-import com.bayutb.core.di.getComponent
-import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
@@ -22,16 +20,21 @@ class ChatRoomFragment : Fragment() {
     private var chatId: Int? = null
     private lateinit var binding: FragmentChatRoomBinding
 
-    @Inject
-    lateinit var viewModelFactory: ChatListViewModelFactory
     private lateinit var viewModel: ChatListViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerChatComponent.builder()
-            .appComponent(requireActivity().application.getComponent())
-            .build().inject(this)
+        val chatComponent = requireActivity().application.getChatComponent()
+        viewModel = ViewModelProvider.create(
+            owner = this,
+            factory = ChatListViewModel.Factory,
+            extras = MutableCreationExtras().apply {
+                set(
+                    ChatListViewModel.C_REPOSITORY_KEY,
+                    chatComponent.provideChatRepository()
+                )
+            }
+        )[ChatListViewModel::class]
         chatId = arguments?.getInt("chatId")
-        viewModel = ViewModelProvider(this, viewModelFactory)[ChatListViewModel::class.java]
     }
 
     override fun onCreateView(
