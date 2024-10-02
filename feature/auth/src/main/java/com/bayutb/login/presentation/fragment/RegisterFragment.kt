@@ -6,18 +6,42 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.MutableCreationExtras
+import com.bayutb.core.app.ComponentProvider
+import com.bayutb.core.app.getParentNavBackStackEntry
 import com.bayutb.core.app.navController
 import com.bayutb.core.di.getComponent
 import com.bayutb.login.databinding.FragmentRegisterBinding
+import com.bayutb.login.di.AuthComponent
 import com.bayutb.login.di.DaggerAuthComponent
+import com.bayutb.login.di.getAuthComponent
 import com.bayutb.login.presentation.viewmodel.RegisterViewModel
-import com.bayutb.login.presentation.viewmodel.RegisterViewModelFactory
-import javax.inject.Inject
 
 class RegisterFragment : Fragment() {
 
-    @Inject lateinit var viewModelFactory: RegisterViewModelFactory
-    private val viewModel: RegisterViewModel by viewModels { viewModelFactory }
+    private val authComponent by lazy {
+        val componentProvider by viewModels<ComponentProvider<AuthComponent>> (
+            ownerProducer = { getParentNavBackStackEntry() },
+            factoryProducer = {
+                ComponentProvider.ComponentProviderFactory(
+                    requireActivity().application.getAuthComponent()
+                )
+            }
+        )
+        componentProvider.component
+    }
+
+    private val viewModel: RegisterViewModel by viewModels(
+        factoryProducer = { RegisterViewModel.Factory },
+        extrasProducer = {
+            MutableCreationExtras().apply {
+                set(
+                    RegisterViewModel.R_REPOSITORY_KEY,
+                    authComponent.provideRegisterRepository()
+                )
+            }
+        }
+    )
 
     private lateinit var binding: FragmentRegisterBinding
 

@@ -14,8 +14,8 @@ object AppRouter {
     ) {
         val currentRoute = navController.currentDestination?.id
         val id = when (feature) {
-            Feature.LOGIN -> R.id.loginFragment
-            Feature.CHAT -> R.id.chatListFragment
+            Feature.LOGIN -> R.id.authNavGraph
+            Feature.CHAT -> R.id.chatNavGraph
             Feature.HOME -> R.id.homeFragment
             Feature.REGISTER -> R.id.registerFragment
             Feature.CHATROOM -> R.id.chatRoomFragment
