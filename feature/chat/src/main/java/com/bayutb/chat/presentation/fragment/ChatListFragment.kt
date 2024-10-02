@@ -1,45 +1,59 @@
 package com.bayutb.chat.presentation.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bayutb.chat.databinding.FragmentChatListBinding
+import com.bayutb.chat.di.ChatComponent
 import com.bayutb.chat.di.getChatComponent
 import com.bayutb.chat.domain.model.Chat
 import com.bayutb.chat.presentation.adapter.ChatListAdapter
 import com.bayutb.chat.presentation.viewmodel.ChatListViewModel
 import com.bayutb.core.app.AppRouter
+import com.bayutb.core.app.ComponentProvider
 import com.bayutb.core.app.Feature
+import com.bayutb.core.app.getParentNavBackStackEntry
 import com.bayutb.core.app.navController
 
 class ChatListFragment : Fragment(), ChatListAdapter.OnClickListener {
-    private val viewModelStoreOwner: ViewModelStoreOwner = this
     private lateinit var chatListAdapter: ChatListAdapter
 
-    private lateinit var viewModel: ChatListViewModel
-    private lateinit var binding: FragmentChatListBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val chatComponent = requireActivity().application.getChatComponent()
-
-        viewModel = ViewModelProvider.create(
-            owner = viewModelStoreOwner,
-            factory = ChatListViewModel.Factory,
-            extras = MutableCreationExtras().apply {
+    private val chatComponent by lazy {
+        val viewModel: ComponentProvider<ChatComponent> by viewModels(
+            ownerProducer = { getParentNavBackStackEntry() },
+            factoryProducer = {
+                ComponentProvider.ComponentProviderFactory(
+                    requireActivity().application.getChatComponent()
+                )
+            }
+        )
+        viewModel.component
+    }
+    private val viewModel: ChatListViewModel by viewModels<ChatListViewModel>(
+        ownerProducer = { getParentNavBackStackEntry() },
+        factoryProducer = { ChatListViewModel.Factory },
+        extrasProducer = {
+            MutableCreationExtras().apply {
                 set(
                     ChatListViewModel.C_REPOSITORY_KEY,
                     chatComponent.provideChatRepository()
                 )
             }
-        )[ChatListViewModel::class]
+        }
+    )
+    private lateinit var binding: FragmentChatListBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        Log.d("Dagger", "$chatComponent LIST CHAT")
+        Log.d("Dagger", "$viewModel LIST CHAT")
     }
 
     override fun onCreateView(

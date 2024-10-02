@@ -1,41 +1,48 @@
 package com.bayutb.mydaggerapplication
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.MutableCreationExtras
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bayutb.core.app.AppRouter
 import com.bayutb.core.app.Feature
 import com.bayutb.core.app.navController
 import com.bayutb.mydaggerapplication.databinding.FragmentHomeBinding
+import com.bayutb.mydaggerapplication.di.MainComponent
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     private val viewModelStoreOwner: ViewModelStoreOwner = this
-    private lateinit var viewModel: MainViewModel
+
+    private val mainComponent by lazy {
+        (requireActivity() as MainActivity).mainComponent
+    }
+
+    private val viewModel by viewModels<MainViewModel> (
+        ownerProducer = { viewModelStoreOwner },
+        factoryProducer = { MainViewModel.Factory },
+        extrasProducer = { MutableCreationExtras().apply {
+            set(
+                MainViewModel.DS_REPOSITORY_KEY,
+                mainComponent.provideDataStoreRepository()
+            )
+        }}
+    )
+
     private lateinit var binding: FragmentHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val mainComponent = (requireActivity() as MainActivity).mainComponent
-        mainComponent.inject(this)
-
-        viewModel = ViewModelProvider.create(
-            owner = viewModelStoreOwner,
-            factory = MainViewModel.Factory,
-            extras = MutableCreationExtras().apply {
-                set(
-                    MainViewModel.DS_REPOSITORY_KEY,
-                    mainComponent.provideDataStoreRepository()
-                )
-            }
-        )[MainViewModel::class]
+        Log.d("Dagger", mainComponent.toString())
     }
 
     override fun onCreateView(
@@ -59,6 +66,11 @@ class HomeFragment : Fragment() {
         binding.btnLogout.setOnClickListener {
             viewModel.logout()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("Dagger", viewModel.toString())
     }
 
     private fun observe() {
