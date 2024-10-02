@@ -5,10 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bayutb.chat.domain.model.Chat
 import com.bayutb.chat.domain.repository.ChatRepository
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class ChatListViewModel(
     private val chatRepository: ChatRepository
@@ -33,16 +35,14 @@ class ChatListViewModel(
             _chatDetail.value = chatRepository.getChatDetail(chatId)
         }
     }
-}
 
-@Suppress("UNCHECKED_CAST")
-class ChatListViewModelFactory @Inject constructor(
-    private val chatRepository: ChatRepository
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ChatListViewModel::class.java)) {
-            return ChatListViewModel(chatRepository) as T
+    companion object {
+        val C_REPOSITORY_KEY = object : CreationExtras.Key<ChatRepository> {}
+        val Factory : ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val repository = this[C_REPOSITORY_KEY] ?: throw IllegalArgumentException("ChatRepository is required")
+                ChatListViewModel(repository)
+            }
         }
-        throw IllegalArgumentException("Check ViewModel Factory!!")
     }
 }

@@ -3,9 +3,10 @@ package com.bayutb.login.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bayutb.core.domain.model.User
 import com.bayutb.core.domain.repository.DataStoreRepository
 import com.bayutb.login.domain.model.LoginResultCode
@@ -14,7 +15,6 @@ import com.bayutb.login.domain.repository.LoginRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class LoginViewModel(
     private val repository: LoginRepository,
@@ -46,6 +46,18 @@ class LoginViewModel(
         }
     }
 
+    companion object {
+        val L_REPOSITORY = object : CreationExtras.Key<LoginRepository> {}
+        val DS_REPOSITORY = object : CreationExtras.Key<DataStoreRepository> {}
+        val Factory = viewModelFactory {
+            initializer {
+                val loginRepository = this[L_REPOSITORY]!!
+                val dataStoreRepository = this[DS_REPOSITORY]!!
+                LoginViewModel(loginRepository, dataStoreRepository)
+            }
+        }
+    }
+
 }
 
 sealed class LoginUiState(val user: User?) {
@@ -53,17 +65,4 @@ sealed class LoginUiState(val user: User?) {
     data class Failed(val message: String) : LoginUiState(null)
     data object Loading : LoginUiState(null)
     data object Idle : LoginUiState(null)
-}
-
-@Suppress("UNCHECKED_CAST")
-class LoginViewModelFactory @Inject constructor(
-    private val repository: LoginRepository,
-    private val dataStoreRepository: DataStoreRepository
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-            return LoginViewModel(repository, dataStoreRepository) as T
-        }
-        throw IllegalArgumentException("Check LoginViewModelFactory!!")
-    }
 }

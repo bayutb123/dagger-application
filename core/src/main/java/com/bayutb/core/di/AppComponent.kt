@@ -19,7 +19,7 @@ interface AppComponent {
     fun dataStoreRepository(): DataStoreRepository
     fun roomRepository(): RoomRepository
 
-    interface AppComponentProvider {
+    fun interface AppComponentProvider {
         fun getComponent(): AppComponent
     }
 

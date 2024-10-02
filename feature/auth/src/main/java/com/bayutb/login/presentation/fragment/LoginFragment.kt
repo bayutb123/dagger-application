@@ -1,31 +1,61 @@
 package com.bayutb.login.presentation.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.MutableCreationExtras
 import com.bayutb.core.app.AppRouter
+import com.bayutb.core.app.ComponentProvider
 import com.bayutb.core.app.Feature
+import com.bayutb.core.app.getParentNavBackStackEntry
 import com.bayutb.core.app.navController
 import com.bayutb.core.di.getComponent
 import com.bayutb.login.databinding.FragmentLoginBinding
+import com.bayutb.login.di.AuthComponent
 import com.bayutb.login.di.DaggerAuthComponent
+import com.bayutb.login.di.getAuthComponent
 import com.bayutb.login.presentation.viewmodel.LoginUiState
 import com.bayutb.login.presentation.viewmodel.LoginViewModel
-import com.bayutb.login.presentation.viewmodel.LoginViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
+    private val viewModelStoreOwner: ViewModelStoreOwner = this
 
-    @Inject
-    lateinit var viewModelFactory: LoginViewModelFactory
-    private val viewModel: LoginViewModel by viewModels { viewModelFactory }
+    private val authComponent by lazy {
+        val componentProvider by viewModels<ComponentProvider<AuthComponent>> (
+            ownerProducer = { getParentNavBackStackEntry() },
+            factoryProducer = {
+                ComponentProvider.ComponentProviderFactory(
+                    requireActivity().application.getAuthComponent()
+                )
+            }
+        )
+        componentProvider.component
+    }
+
+    private val viewModel: LoginViewModel by viewModels(
+        ownerProducer = { viewModelStoreOwner },
+        factoryProducer = { LoginViewModel.Factory },
+        extrasProducer = {
+            MutableCreationExtras().apply {
+                set(
+                    LoginViewModel.L_REPOSITORY,
+                    authComponent.provideLoginRepository()
+                )
+                set(
+                    LoginViewModel.DS_REPOSITORY,
+                    authComponent.provideDataStoreRepository()
+                )
+            }
+        }
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
