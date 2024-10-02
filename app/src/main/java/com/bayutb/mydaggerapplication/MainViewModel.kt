@@ -1,8 +1,10 @@
 package com.bayutb.mydaggerapplication
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bayutb.core.domain.model.User
 import com.bayutb.core.domain.repository.DataStoreRepository
 import kotlinx.coroutines.flow.SharingStarted
@@ -11,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val dataStoreRepository: DataStoreRepository
-): ViewModel() {
+) : ViewModel() {
     val user = dataStoreRepository.getLoggedInUser().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
@@ -23,16 +25,14 @@ class MainViewModel(
             dataStoreRepository.deleteSession()
         }
     }
-}
 
-@Suppress("UNCHECKED_CAST")
-class MainViewModelProvider(
-    private val dataStoreRepository: DataStoreRepository
-): ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-            return MainViewModel(dataStoreRepository) as T
+    companion object {
+        val DS_REPOSITORY_KEY = object : CreationExtras.Key<DataStoreRepository> {}
+        val Factory = viewModelFactory {
+            initializer {
+                val dataStoreRepository = this[DS_REPOSITORY_KEY] as DataStoreRepository
+                MainViewModel(dataStoreRepository)
+            }
         }
-        throw IllegalArgumentException("Check MainViewModelProvider!!")
     }
 }
