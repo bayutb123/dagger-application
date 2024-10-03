@@ -48,15 +48,3 @@ class RegisterViewModel(
         }
     }
 }
-
-@Suppress("UNCHECKED_CAST")
-class RegisterViewModelFactory @Inject constructor(
-    private val registerRepository: RegisterRepository
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {
-            return RegisterViewModel(registerRepository) as T
-        }
-        throw IllegalArgumentException("Check RegisterViewModelProvider!!")
-    }
-}

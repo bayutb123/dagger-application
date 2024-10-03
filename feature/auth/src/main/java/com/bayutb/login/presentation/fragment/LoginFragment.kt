@@ -19,7 +19,6 @@ import com.bayutb.login.databinding.FragmentLoginBinding
 import com.bayutb.login.di.AuthComponent
 import com.bayutb.login.di.DaggerAuthComponent
 import com.bayutb.login.di.getAuthComponent
-import com.bayutb.login.presentation.viewmodel.LoginUiState
 import com.bayutb.login.presentation.viewmodel.LoginViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -93,7 +92,7 @@ class LoginFragment : Fragment() {
 
     private fun observe() {
         viewModel.uiState.observe(viewLifecycleOwner) { loginUiState ->
-            binding.errorMsg.visibility = if (loginUiState is LoginUiState.Failed) {
+            binding.errorMsg.visibility = if (loginUiState is LoginViewModel.LoginUiState.Failed) {
                 View.VISIBLE
             } else {
                 View.GONE

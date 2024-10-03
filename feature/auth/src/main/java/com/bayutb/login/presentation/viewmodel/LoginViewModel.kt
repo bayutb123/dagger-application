@@ -58,11 +58,10 @@ class LoginViewModel(
         }
     }
 
-}
-
-sealed class LoginUiState(val user: User?) {
-    data class Success(val result: User) : LoginUiState(result)
-    data class Failed(val message: String) : LoginUiState(null)
-    data object Loading : LoginUiState(null)
-    data object Idle : LoginUiState(null)
+    sealed class LoginUiState(val user: User?) {
+        data class Success(val result: User) : LoginUiState(result)
+        data class Failed(val message: String) : LoginUiState(null)
+        data object Loading : LoginUiState(null)
+        data object Idle : LoginUiState(null)
+    }
 }
