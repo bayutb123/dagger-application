@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.bayutb.core.app.NavControllerProvider
 import com.bayutb.mydaggerapplication.databinding.ActivityMainBinding
@@ -24,17 +25,14 @@ class MainActivity : AppCompatActivity(), NavControllerProvider {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (supportFragmentManager.findFragmentById(R.id.navHost) == null) {
-            val navHostFragment = NavHostFragment.create(com.bayutb.core.R.navigation.nav_graph)
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.navHost, navHostFragment)
-                .setPrimaryNavigationFragment(navHostFragment)
-                .commitNow()
-        }
-        navController = (supportFragmentManager.findFragmentById(R.id.navHost) as NavHostFragment).navController
+        navController = findNavController(R.id.navHost)
     }
 
     override fun getNavController(): NavController {
         return navController
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }
