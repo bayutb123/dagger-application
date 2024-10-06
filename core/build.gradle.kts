@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.ksp)
-    id("androidx.navigation.safeargs")
+    alias(libs.plugins.serialization)
 }
 
 android {
@@ -65,4 +65,7 @@ dependencies {
     api(libs.navigation.ui)
     api(libs.navigation.fragment)
     api(libs.navigation.dynamic.features)
+
+    // kotlinx serialization
+    api(libs.kotlinx.serialization.json)
 }

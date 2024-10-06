@@ -46,13 +46,6 @@ class ChatRoomFragment : Fragment() {
             }
         }
     )
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        chatId = arguments?.getInt("chatId")
-
-        Log.d("Dagger", "$chatComponent CHAT ROOM")
-        Log.d("Dagger", "$viewModel CHAT ROOM")
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,14 +57,17 @@ class ChatRoomFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        chatId = arguments?.getString("chatId")?.toInt()
         chatId?.let { viewModel.getChatDetail(it) }
         observe()
     }
 
     private fun observe() {
         viewModel.chatDetail.observe(viewLifecycleOwner) { chat ->
-            binding.sender.text = chat.sender
-            binding.msg.text = chat.msg
+            chat?.let {
+                binding.sender.text = chat.sender
+                binding.msg.text = chat.msg
+            }
         }
     }
 }

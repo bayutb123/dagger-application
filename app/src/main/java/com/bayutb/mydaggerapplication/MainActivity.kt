@@ -4,13 +4,17 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import androidx.navigation.createGraph
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import com.bayutb.core.app.NavControllerProvider
+import androidx.navigation.fragment.fragment
+import com.bayutb.core.app.Routes
+import com.bayutb.core.app.addGraphFromXML
+import com.bayutb.login.presentation.fragment.LoginFragment
+import com.bayutb.login.presentation.fragment.RegisterFragment
 import com.bayutb.mydaggerapplication.databinding.ActivityMainBinding
 import com.bayutb.mydaggerapplication.di.MainComponent
 
-class MainActivity : AppCompatActivity(), NavControllerProvider {
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     val mainComponent: MainComponent by lazy {
@@ -26,10 +30,26 @@ class MainActivity : AppCompatActivity(), NavControllerProvider {
         setContentView(binding.root)
 
         navController = findNavController(R.id.navHost)
-    }
+        navController.graph = navController.createGraph(
+            startDestination = Routes.Home
+        ) {
+            fragment<HomeFragment, Routes.Home>{
+                label = "Home"
+            }
+            fragment<LoginFragment, Routes.Login> {
+                label = "Login"
+            }
+            fragment<RegisterFragment, Routes.Register> {
+                label = "Register"
+            }
 
-    override fun getNavController(): NavController {
-        return navController
+        }
+
+        navController.addGraphFromXML(
+            context = this@MainActivity,
+            destName = "com.bayutb.chat.presentation.fragment.ChatListFragment"
+        )
+
     }
 
     override fun onSupportNavigateUp(): Boolean {

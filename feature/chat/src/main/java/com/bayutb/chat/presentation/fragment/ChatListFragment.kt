@@ -1,13 +1,13 @@
 package com.bayutb.chat.presentation.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.MutableCreationExtras
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bayutb.chat.databinding.FragmentChatListBinding
 import com.bayutb.chat.di.ChatComponent
@@ -19,7 +19,6 @@ import com.bayutb.core.app.AppRouter
 import com.bayutb.core.app.ComponentProvider
 import com.bayutb.core.app.Feature
 import com.bayutb.core.app.getParentNavBackStackEntry
-import com.bayutb.core.app.navController
 
 class ChatListFragment : Fragment(), ChatListAdapter.OnClickListener {
     private lateinit var chatListAdapter: ChatListAdapter
@@ -49,13 +48,6 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnClickListener {
     )
     private lateinit var binding: FragmentChatListBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        Log.d("Dagger", "$chatComponent LIST CHAT")
-        Log.d("Dagger", "$viewModel LIST CHAT")
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -80,9 +72,9 @@ class ChatListFragment : Fragment(), ChatListAdapter.OnClickListener {
     }
 
     override fun onClick(chat: Chat) {
-        val bundle = Bundle().also {
-            it.putInt("chatId", chat.id)
-        }
-        AppRouter.go(requireActivity().navController(), Feature.CHATROOM, bundle)
+        AppRouter.go(
+            findNavController(),
+            Feature.CHATROOM(chat.id)
+        )
     }
 }

@@ -7,16 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.MutableCreationExtras
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import com.bayutb.core.app.AppRouter
 import com.bayutb.core.app.Feature
-import com.bayutb.core.app.navController
+import com.bayutb.core.app.Routes
 import com.bayutb.mydaggerapplication.databinding.FragmentHomeBinding
-import com.bayutb.mydaggerapplication.di.MainComponent
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -27,15 +26,17 @@ class HomeFragment : Fragment() {
         (requireActivity() as MainActivity).mainComponent
     }
 
-    private val viewModel by viewModels<MainViewModel> (
+    private val viewModel by viewModels<MainViewModel>(
         ownerProducer = { viewModelStoreOwner },
         factoryProducer = { MainViewModel.Factory },
-        extrasProducer = { MutableCreationExtras().apply {
-            set(
-                MainViewModel.DS_REPOSITORY_KEY,
-                mainComponent.provideDataStoreRepository()
-            )
-        }}
+        extrasProducer = {
+            MutableCreationExtras().apply {
+                set(
+                    MainViewModel.DS_REPOSITORY_KEY,
+                    mainComponent.provideDataStoreRepository()
+                )
+            }
+        }
     )
 
     private lateinit var binding: FragmentHomeBinding
@@ -61,7 +62,7 @@ class HomeFragment : Fragment() {
 
     private fun setupView() {
         binding.btnChat.setOnClickListener {
-            AppRouter.go(requireActivity().navController(), Feature.CHAT)
+            AppRouter.go(findNavController(), Feature.CHAT)
         }
         binding.btnLogout.setOnClickListener {
             viewModel.logout()
@@ -80,11 +81,13 @@ class HomeFragment : Fragment() {
                     binding.btnLogout.visibility = View.VISIBLE
                     binding.tvUserInfo.text = user.userName
                 } else {
-                    AppRouter.go(
-                        requireActivity().navController(),
-                        Feature.LOGIN,
-                        popBackStack = true
-                    )
+                    val currentRoute = findNavController().currentDestination?.route
+                    val navOptions = NavOptions.Builder().apply {
+                        currentRoute?.let { route ->
+                            setPopUpTo(route, inclusive = true)
+                        }
+                    }.build()
+                    findNavController().navigate(Routes.Login, navOptions)
                 }
             }
         }

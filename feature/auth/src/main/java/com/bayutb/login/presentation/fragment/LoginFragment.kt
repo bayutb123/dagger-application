@@ -9,11 +9,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.MutableCreationExtras
-import com.bayutb.core.app.AppRouter
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import com.bayutb.core.app.ComponentProvider
-import com.bayutb.core.app.Feature
+import com.bayutb.core.app.Routes
 import com.bayutb.core.app.getParentNavBackStackEntry
-import com.bayutb.core.app.navController
 import com.bayutb.core.di.getComponent
 import com.bayutb.login.databinding.FragmentLoginBinding
 import com.bayutb.login.di.AuthComponent
@@ -86,7 +86,7 @@ class LoginFragment : Fragment() {
             }
         }
         binding.btnRegisterNow.setOnClickListener{
-            AppRouter.go(requireActivity().navController(), Feature.REGISTER)
+            findNavController().navigate(Routes.Register)
         }
     }
 
@@ -101,7 +101,13 @@ class LoginFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.loggedIn.collectLatest { user->
                 if (user != null) {
-                    AppRouter.go(requireActivity().navController(), Feature.HOME, popBackStack = true)
+                    val currentRoute = findNavController().currentDestination?.route
+                    val navOptions = NavOptions.Builder().apply {
+                        currentRoute?.let { route ->
+                            setPopUpTo(route, inclusive = true)
+                        }
+                    }.build()
+                    findNavController().navigate(Routes.Home, navOptions)
                 }
             }
         }

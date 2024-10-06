@@ -1,25 +1,25 @@
 package com.bayutb.core.app
 
-import android.os.Bundle
+import androidx.core.net.toUri
 import androidx.navigation.NavController
+import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
-import com.bayutb.core.R
 
 object AppRouter {
     fun go(
         navController: NavController,
         feature: Feature,
-        bundle: Bundle = Bundle(),
         popBackStack: Boolean = false,
     ) {
         val currentRoute = navController.currentDestination?.id
-        val id = when (feature) {
-            Feature.LOGIN -> R.id.authNavGraph
-            Feature.CHAT -> R.id.chatNavGraph
-            Feature.HOME -> R.id.homeFragment
-            Feature.REGISTER -> R.id.registerFragment
-            Feature.CHATROOM -> R.id.chatRoomFragment
-        }
+
+        val uri = when (feature) {
+            Feature.CHAT -> "android-app://com.bayutb.chat/chatlist"
+            is Feature.CHATROOM -> "android-app://com.bayutb.chat/chatroom/${feature.chatId}"
+        }.toUri()
+
+        val navDeepLinkRequest = NavDeepLinkRequest.Builder.fromUri(uri)
+            .build()
 
         val navOptions = NavOptions.Builder().apply {
             if (popBackStack) {
@@ -29,14 +29,11 @@ object AppRouter {
             }
         }.build()
 
-        navController.navigate(id, bundle, navOptions)
+        navController.navigate(navDeepLinkRequest, navOptions)
     }
 }
 
-enum class Feature {
-    LOGIN,
-    CHAT,
-    HOME,
-    REGISTER,
-    CHATROOM
+sealed class Feature {
+    data object CHAT : Feature()
+    data class CHATROOM(val chatId: Int) : Feature()
 }

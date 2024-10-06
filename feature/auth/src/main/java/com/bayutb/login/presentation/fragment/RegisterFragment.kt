@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.MutableCreationExtras
+import androidx.navigation.fragment.findNavController
 import com.bayutb.core.app.ComponentProvider
 import com.bayutb.core.app.getParentNavBackStackEntry
-import com.bayutb.core.app.navController
 import com.bayutb.core.di.getComponent
 import com.bayutb.login.databinding.FragmentRegisterBinding
 import com.bayutb.login.di.AuthComponent
@@ -57,7 +57,7 @@ class RegisterFragment : Fragment() {
     private fun observe() {
         viewModel.navigateToLogin.observe(viewLifecycleOwner) { shouldNavigate ->
             if (shouldNavigate) {
-                requireActivity().navController().popBackStack()
+                findNavController().navigateUp()
             }
         }
     }
